@@ -1,0 +1,24 @@
+.todo{
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 45px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    border: solid rgb(207, 201, 201) 1px;
+    width: 70%;
+}
+
+.alta {
+    color: rgb(255, 112, 112);
+}
+
+.media {
+    color: rgb(168, 168, 73);
+}
+
+.baja{
+    color: rgb(71, 129, 71);
+}
