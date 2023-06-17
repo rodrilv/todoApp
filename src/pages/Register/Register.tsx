@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { TextField, Button, Box, CircularProgress } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../services";
 import Swal from "sweetalert2";
 import "./Register.css";
 
 export const Register = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     username: "",
@@ -41,6 +42,7 @@ export const Register = () => {
   async function createUser() {
     if (validateInputs()) {
       await register(setLoading, user);
+      navigate("/login");
     }
   }
 
