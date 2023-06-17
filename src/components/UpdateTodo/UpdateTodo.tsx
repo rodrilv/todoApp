@@ -12,6 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Swal from "sweetalert2";
 import { getLocalStorageId } from "../../helpers/getLocalStorageId";
 import axios from "axios";
+import { updateTodo } from "../../services";
 
 export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
   const [updatedTodo, setUpdatedTodo] = useState({
@@ -24,27 +25,10 @@ export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
   });
   const [loading, setLoading] = useState(false);
 
-  async function updateTodo() {
-    setLoading(true);
-    try {
-      await axios.put(`${import.meta.env.VITE_API_URL}updateTodo`, updatedTodo);
-      Swal.fire({
-        title: "Guardado con Éxito",
-        icon: "success",
-      });
-      handleClose();
-    } catch (error) {
-      Swal.fire({
-        title: "Hubo un error al guardar el TODO",
-        icon: "warning",
-      });
-    }
-    setLoading(false);
-  }
-
   async function saveUpdatesTodo() {
+    setLoading(true);
     if (validateTodo()) {
-      await updateTodo();
+      await updateTodo(updatedTodo, handleClose);
       await getTodos(getLocalStorageId());
     } else {
       Swal.fire({
@@ -53,6 +37,7 @@ export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
         icon: "question",
       });
     }
+    setLoading(false);
   }
 
   function validateTodo() {

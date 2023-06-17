@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { Box, Button, Modal } from "@mui/material";
 import { Todo } from "../../interfaces/todo.interface";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import "./Todo.css";
 import { UpdateTodo } from "..";
+import Swal from "sweetalert2";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
+import "./Todo.css";
+import { getLocalStorageId } from "../../helpers/getLocalStorageId";
+import { deleteTodo } from "../../services";
 
 export function TodoComponent({
   _id,
@@ -18,6 +22,23 @@ export function TodoComponent({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  async function confirmDeleteTodo() {
+    Swal.fire({
+      title: "¿De verdad quieres eliminar el TODO?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      denyButtonText: `No`,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteTodo(_id);
+        await getTodos(getLocalStorageId());
+      } else if (result.isDenied) {
+        Swal.close();
+      }
+    });
+  }
 
   return (
     <>
@@ -56,7 +77,11 @@ export function TodoComponent({
           </div>
         </div>
         <div className="actions">
-          <Button style={{ marginTop: 10, width: 160 }} variant="outlined">
+          <Button
+            onClick={confirmDeleteTodo}
+            style={{ marginTop: 10, width: 160 }}
+            variant="outlined"
+          >
             <DeleteIcon />
           </Button>
           <Button

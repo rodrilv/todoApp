@@ -17,6 +17,7 @@ import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "./TodoApp.css";
+import { getTodos } from "../../services";
 
 export const TodoApp = () => {
   const [user, setUser] = useState(getLocalStorageUser());
@@ -31,21 +32,6 @@ export const TodoApp = () => {
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  async function getTodos(_id: string | null) {
-    setLoading(true);
-    try {
-      await axios
-        .get(`${import.meta.env.VITE_API_URL}getTodos/${_id}`)
-        .then((todos) => setTodos(todos["data"].todos));
-    } catch (error) {
-      Swal.fire({
-        title: "No se pudieron obtener los TODOs",
-        icon: "warning",
-      });
-    }
-    setLoading(false);
-  }
 
   async function createTodo() {
     try {
@@ -65,7 +51,7 @@ export const TodoApp = () => {
   async function saveTodo() {
     if (validateTodo()) {
       await createTodo();
-      await getTodos(getLocalStorageId());
+      await getTodos(getLocalStorageId(), setTodos);
     } else {
       Swal.fire({
         title: "Uno o más de los campos están vacíos!",
@@ -108,7 +94,7 @@ export const TodoApp = () => {
   }, []);
 
   useEffect(() => {
-    getTodos(getLocalStorageId());
+    getTodos(getLocalStorageId(), setTodos);
   }, []);
 
   return (
