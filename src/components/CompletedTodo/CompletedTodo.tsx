@@ -3,7 +3,6 @@ import { Button } from "@mui/material";
 import { getLocalStorageId } from "../../helpers/getLocalStorageId";
 import { deleteTodo, getTodos } from "../../services";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import Swal from "sweetalert2";
 import "./CompletedTodo.css";
 
