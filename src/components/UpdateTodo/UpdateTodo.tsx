@@ -40,7 +40,7 @@ export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
   }
 
   function validateTodo(): boolean {
-    if (!updatedTodo.title && !updatedTodo.content && !updatedTodo.priority) {
+    if (!updatedTodo.title || !updatedTodo.content || !updatedTodo.priority) {
       return false;
     }
     return true;
