@@ -5,7 +5,6 @@ import { UpdateTodo } from "..";
 import Swal from "sweetalert2";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 import "./Todo.css";
 import { getLocalStorageId } from "../../helpers/getLocalStorageId";
 import { deleteTodo } from "../../services";
