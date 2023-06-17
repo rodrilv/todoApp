@@ -18,6 +18,7 @@ import Swal from "sweetalert2";
 import SendIcon from "@mui/icons-material/Send";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import "./TodoApp.css";
+import { CompletedTodo } from "../../components/CompletedTodo/CompletedTodo";
 
 export const TodoApp = () => {
   const [loading, setLoading] = useState(false);
@@ -29,6 +30,7 @@ export const TodoApp = () => {
     content: "",
     date: `${new Date()}`,
     priority: "",
+    status: "",
     user_id: getLocalStorageId(),
   });
 
@@ -190,8 +192,11 @@ export const TodoApp = () => {
       <div>
         {todos &&
           todos.map((todo) => {
-            todo = { ...todo, getTodos: getTodos };
-            return <TodoComponent {...todo} key={todo._id}></TodoComponent>;
+            todo = { ...todo, setTodos: setTodos };
+            if (todo.status === "Pendiente") {
+              return <TodoComponent {...todo} key={todo._id}></TodoComponent>;
+            }
+            return <CompletedTodo {...todo} key={todo._id} />;
           })}
       </div>
     </div>

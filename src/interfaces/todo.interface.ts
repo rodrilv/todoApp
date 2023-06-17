@@ -5,5 +5,6 @@ export interface Todo {
     date:  string;
     priority:  string;
     user_id:  string | null;
-    getTodos?: any;
+    status: string;
+    setTodos?: any;
 }

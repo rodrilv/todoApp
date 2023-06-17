@@ -7,7 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./Todo.css";
 import { getLocalStorageId } from "../../helpers/getLocalStorageId";
-import { deleteTodo } from "../../services";
+import { deleteTodo, completeTodo, getTodos } from "../../services";
 
 export function TodoComponent({
   _id,
@@ -16,7 +16,8 @@ export function TodoComponent({
   date,
   priority,
   user_id,
-  getTodos,
+  setTodos,
+  status,
 }: Todo) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -29,10 +30,31 @@ export function TodoComponent({
       showCancelButton: true,
       confirmButtonText: "Si",
       denyButtonText: `No`,
+      confirmButtonColor: "red",
+      denyButtonColor: "green",
     }).then(async (result) => {
       if (result.isConfirmed) {
         await deleteTodo(_id);
-        await getTodos(getLocalStorageId());
+        await getTodos(getLocalStorageId(), setTodos);
+      } else if (result.isDenied) {
+        Swal.close();
+      }
+    });
+  }
+
+  async function confirmCompleteTodo() {
+    Swal.fire({
+      title: "¿Deseas marcar como completado el TODO?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      denyButtonText: `No`,
+      confirmButtonColor: "green",
+      denyButtonColor: "gray",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await completeTodo(_id, user_id);
+        await getTodos(getLocalStorageId(), setTodos);
       } else if (result.isDenied) {
         Swal.close();
       }
@@ -72,6 +94,7 @@ export function TodoComponent({
           <div className="content">
             <p>{content}</p>
             <small>{date}</small>
+            <p>{status}</p>
             <p />
           </div>
         </div>
@@ -89,6 +112,12 @@ export function TodoComponent({
             variant="outlined"
           >
             <EditIcon />
+          </Button>
+          <Button
+            style={{ marginTop: 30, width: 160 }}
+            onClick={confirmCompleteTodo}
+          >
+            COMPLETAR
           </Button>
         </div>
       </div>
