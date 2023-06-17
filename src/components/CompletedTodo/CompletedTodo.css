@@ -1,0 +1,32 @@
+.todo-c{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    padding: 30px;
+    margin-top: 45px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    border: solid rgb(207, 201, 201) 1px;
+    width: 70%;
+}
+
+.actions-c {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+}
+
+.alta-c {
+    color: rgb(255, 112, 112);
+    text-decoration:line-through;
+}
+
+.media-c {
+    color: rgb(168, 168, 73);
+    text-decoration:line-through;
+}
+
+.baja-c {
+    color: rgb(71, 129, 71);
+    text-decoration:line-through;
+}
