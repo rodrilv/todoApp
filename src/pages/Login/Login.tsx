@@ -47,6 +47,7 @@ export const Login = () => {
         variant="outlined"
         onChange={(e) => setUser(e.target.value)}
       />
+      <hr />
       <TextField
         className="input-fields"
         label="Password"
@@ -54,8 +55,9 @@ export const Login = () => {
         type="password"
         onChange={(e) => setPassword(e.target.value)}
       />
+      <hr />
       {loading ? (
-        <Button disabled variant="contained">
+        <Button disabled={true} variant="contained">
           <Box sx={{ display: "flex" }}>
             <CircularProgress />
           </Box>
@@ -67,7 +69,7 @@ export const Login = () => {
       )}
 
       <Link className="register-link" to={"/register"}>
-        Register
+        REGISTRO
       </Link>
     </div>
   );

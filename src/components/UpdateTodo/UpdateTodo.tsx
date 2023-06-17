@@ -11,10 +11,10 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import Swal from "sweetalert2";
 import { getLocalStorageId } from "../../helpers/getLocalStorageId";
-import axios from "axios";
 import { updateTodo } from "../../services";
 
 export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
+  const [loading, setLoading] = useState(false);
   const [updatedTodo, setUpdatedTodo] = useState({
     _id: id,
     title: "",
@@ -23,7 +23,6 @@ export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
     priority: "",
     user_id: user_id,
   });
-  const [loading, setLoading] = useState(false);
 
   async function saveUpdatesTodo() {
     setLoading(true);
@@ -40,7 +39,7 @@ export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
     setLoading(false);
   }
 
-  function validateTodo() {
+  function validateTodo(): boolean {
     if (!updatedTodo.title && !updatedTodo.content && !updatedTodo.priority) {
       return false;
     }
@@ -66,49 +65,57 @@ export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
     });
   }
   return (
-    <div>
-      <div style={{ backgroundColor: "white" }} className="todo-container">
-        <TextField
-          onChange={handleOnChangeTitle}
-          label="Título"
-          variant="outlined"
-        />
-        <hr />
-        <TextField
-          onChange={handleOnChangeDescription}
-          label="Descripción"
-          variant="outlined"
-        />
-        <hr />
-        <InputLabel id="priority-label">Prioridad</InputLabel>
-        <Select
-          labelId="priority-label"
-          id="priority"
-          value={updatedTodo.priority}
-          label="Prioridad"
-          onChange={handleOnChangePriority}
-        >
-          <MenuItem value={"Alta"}>Alta</MenuItem>
-          <MenuItem value={"Media"}>Media</MenuItem>
-          <MenuItem value={"Baja"}>Baja</MenuItem>
-        </Select>
+    <div
+      style={{ backgroundColor: "#2c2c2c", marginTop: "35%" }}
+      className="todo-container"
+    >
+      <TextField
+        onChange={handleOnChangeTitle}
+        label="Título"
+        variant="outlined"
+      />
+      <hr />
+      <TextField
+        onChange={handleOnChangeDescription}
+        label="Descripción"
+        variant="outlined"
+      />
+      <hr />
+      <InputLabel id="priority-label">Prioridad</InputLabel>
+      <Select
+        labelId="priority-label"
+        id="priority"
+        value={updatedTodo.priority}
+        label="Prioridad"
+        onChange={handleOnChangePriority}
+      >
+        <MenuItem value={"Alta"}>Alta</MenuItem>
+        <MenuItem value={"Media"}>Media</MenuItem>
+        <MenuItem value={"Baja"}>Baja</MenuItem>
+      </Select>
 
-        {loading ? (
-          <Button disabled variant="contained">
-            <Box sx={{ display: "flex" }}>
-              <CircularProgress />
-            </Box>
-          </Button>
-        ) : (
-          <Button
-            onClick={saveUpdatesTodo}
-            variant="contained"
-            endIcon={<EditIcon />}
-          >
-            Actualizar TODO
-          </Button>
-        )}
-      </div>
+      {loading ? (
+        <Button disabled={true} variant="contained">
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
+        </Button>
+      ) : (
+        <Button
+          onClick={saveUpdatesTodo}
+          variant="contained"
+          endIcon={<EditIcon />}
+        >
+          Actualizar TODO
+        </Button>
+      )}
+      <Button
+        style={{ marginTop: 20 }}
+        variant="outlined"
+        onClick={handleClose}
+      >
+        Cerrar
+      </Button>
     </div>
   );
 };

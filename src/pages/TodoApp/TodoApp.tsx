@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { getLocalStorageUser } from "../../helpers/getLocalStorageUser";
 import { useNavigate } from "react-router-dom";
+import { getLocalStorageUser } from "../../helpers/getLocalStorageUser";
+import { getLocalStorageId } from "../../helpers/getLocalStorageId";
 import {
   Button,
   TextField,
@@ -12,46 +13,31 @@ import {
 } from "@mui/material";
 import { TodoComponent } from "../../components";
 import { Todo } from "../../interfaces/todo.interface";
-import { getLocalStorageId } from "../../helpers/getLocalStorageId";
-import SendIcon from "@mui/icons-material/Send";
-import axios from "axios";
+import { createTodo, getTodos, getTodosByPriority } from "../../services";
 import Swal from "sweetalert2";
+import SendIcon from "@mui/icons-material/Send";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import "./TodoApp.css";
-import { getTodos } from "../../services";
 
 export const TodoApp = () => {
-  const [user, setUser] = useState(getLocalStorageUser());
+  const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const navigate = useNavigate();
   const [newTodo, setNewTodo] = useState({
-    id: "",
+    _id: "",
     title: "",
     content: "",
-    date: new Date(),
+    date: `${new Date()}`,
     priority: "",
     user_id: getLocalStorageId(),
   });
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  async function createTodo() {
-    try {
-      await axios.post(`${import.meta.env.VITE_API_URL}createTodo`, newTodo);
-      Swal.fire({
-        title: "Guardado con Éxito",
-        icon: "success",
-      });
-    } catch (error) {
-      Swal.fire({
-        title: "Hubo un error al guardar el TODO",
-        icon: "warning",
-      });
-    }
-  }
 
   async function saveTodo() {
     if (validateTodo()) {
-      await createTodo();
+      setLoading(true);
+      await createTodo(newTodo);
       await getTodos(getLocalStorageId(), setTodos);
+      setLoading(false);
     } else {
       Swal.fire({
         title: "Uno o más de los campos están vacíos!",
@@ -59,6 +45,12 @@ export const TodoApp = () => {
         icon: "question",
       });
     }
+  }
+
+  async function handleGetTodosByPriority(priority: string) {
+    setLoading(true);
+    await getTodosByPriority(getLocalStorageId(), priority, setTodos);
+    setLoading(false);
   }
 
   function validateTodo() {
@@ -87,8 +79,17 @@ export const TodoApp = () => {
     });
   }
 
+  function logout() {
+    Swal.fire({
+      title: "Sesión cerrada",
+      icon: "success",
+    });
+    localStorage.clear();
+    navigate("/login");
+  }
+
   useEffect(() => {
-    if (!user) {
+    if (!getLocalStorageUser()) {
       navigate("/login");
     }
   }, []);
@@ -100,6 +101,19 @@ export const TodoApp = () => {
   return (
     <div>
       <div className="todo-container">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginLeft: "auto",
+            marginRight: "auto",
+            alignItems: "center",
+          }}
+        >
+          <Button onClick={logout}>
+            <PowerSettingsNewIcon />
+          </Button>
+        </div>
         <TextField
           onChange={handleOnChangeTitle}
           label="Título"
@@ -112,8 +126,11 @@ export const TodoApp = () => {
           variant="outlined"
         />
         <hr />
-        <InputLabel id="priority-label">Prioridad</InputLabel>
+        <InputLabel style={{ color: "#ffffff" }} id="priority-label">
+          Prioridad
+        </InputLabel>
         <Select
+          style={{ color: "#ffffff" }}
           labelId="priority-label"
           id="priority"
           value={newTodo.priority}
@@ -126,16 +143,49 @@ export const TodoApp = () => {
         </Select>
 
         {loading ? (
-          <Button disabled variant="contained">
+          <Button style={{ marginTop: 10 }} disabled={true} variant="contained">
             <Box sx={{ display: "flex" }}>
               <CircularProgress />
             </Box>
           </Button>
         ) : (
-          <Button onClick={saveTodo} variant="contained" endIcon={<SendIcon />}>
+          <Button
+            style={{ marginTop: 10 }}
+            onClick={saveTodo}
+            variant="contained"
+            endIcon={<SendIcon />}
+          >
             Guardar TODO
           </Button>
         )}
+        <hr />
+        <p>Filtrar por Prioridad</p>
+        <div className="filter-container">
+          <Button
+            onClick={() => getTodos(getLocalStorageId(), setTodos)}
+            disabled={loading}
+          >
+            Todos
+          </Button>
+          <Button
+            onClick={() => handleGetTodosByPriority("Alta")}
+            disabled={loading}
+          >
+            ALTA
+          </Button>
+          <Button
+            onClick={() => handleGetTodosByPriority("Media")}
+            disabled={loading}
+          >
+            MEDIA
+          </Button>
+          <Button
+            onClick={() => handleGetTodosByPriority("Baja")}
+            disabled={loading}
+          >
+            BAJA
+          </Button>
+        </div>
       </div>
       <div>
         {todos &&

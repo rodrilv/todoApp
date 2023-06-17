@@ -1,9 +1,9 @@
 export interface Todo {
-    _id: string;
+    _id?: string;
     title:  string;
     content:  string;
     date:  string;
     priority:  string;
-    user_id:  string;
+    user_id:  string | null;
     getTodos?: any;
 }

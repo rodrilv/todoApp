@@ -1,14 +1,21 @@
-import { useState } from "react";
 import "./App.css";
-import { getLocalStorageUser } from "./helpers/getLocalStorageUser";
 import { Router } from "./router/Router";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 function App() {
-  const [user, setUser] = useState(getLocalStorageUser());
-
   return (
     <>
-      <Router />
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Router />
+      </ThemeProvider>
     </>
   );
 }

@@ -1,10 +1,10 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export async function getTodos(_id: string | null, setTodos?: any | void){
+export async function getTodosByPriority(_id: string | null ,priority: string, setTodos?: any | void){
     try {
         await axios
-          .get(`${import.meta.env.VITE_API_URL}getTodos/${_id}`)
+          .get(`${import.meta.env.VITE_API_URL}getTodosByPriority/${_id}/${priority}`)
           .then((todos) => setTodos(todos["data"].todos));
       } catch (error) {
         console.log(error);
