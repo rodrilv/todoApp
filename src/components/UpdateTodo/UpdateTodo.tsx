@@ -66,7 +66,7 @@ export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
   }
   return (
     <div
-      style={{ backgroundColor: "#2c2c2c", marginTop: "35%" }}
+      style={{ backgroundColor: "#2c2c2c", marginTop: "120px" }}
       className="todo-container"
     >
       <TextField
