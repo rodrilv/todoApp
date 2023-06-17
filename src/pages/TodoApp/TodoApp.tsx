@@ -56,7 +56,7 @@ export const TodoApp = () => {
   }
 
   function validateTodo() {
-    if (!newTodo.title && !newTodo.content && !newTodo.priority) {
+    if (!newTodo.title || !newTodo.content || !newTodo.priority) {
       return false;
     }
     return true;
