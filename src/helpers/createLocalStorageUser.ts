@@ -1,3 +1,3 @@
-export function createLocalStorageUser(username: string){
-    localStorage.setItem('username', username);
+export function createLocalStorageUser(_id: string){
+    localStorage.setItem('username', _id);
 }

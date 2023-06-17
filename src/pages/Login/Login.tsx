@@ -5,6 +5,7 @@ import { useState } from "react";
 import { createLocalStorageUser } from "../../helpers/createLocalStorageUser";
 import Swal from "sweetalert2";
 import "./Login.css";
+import { createLocalStorageId } from "../../helpers/createLocalStorageId";
 
 export const Login = () => {
   const [user, setUser] = useState("");
@@ -23,6 +24,7 @@ export const Login = () => {
         .then((response) => {
           setLoading(false);
           createLocalStorageUser(response["data"].user["username"]);
+          createLocalStorageId(response["data"].user["_id"]);
           navigate("/", { replace: true });
         });
     } catch (error) {

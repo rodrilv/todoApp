@@ -1,70 +1,50 @@
-import { useState, useEffect } from "react";
-import { getLocalStorageUser } from "../../helpers/getLocalStorageUser";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
-  Button,
   TextField,
-  Select,
   InputLabel,
+  Select,
+  Button,
   MenuItem,
   Box,
   CircularProgress,
 } from "@mui/material";
-import { TodoComponent } from "../../components";
-import { Todo } from "../../interfaces/todo.interface";
-import { getLocalStorageId } from "../../helpers/getLocalStorageId";
-import SendIcon from "@mui/icons-material/Send";
-import axios from "axios";
+import EditIcon from "@mui/icons-material/Edit";
 import Swal from "sweetalert2";
-import "./TodoApp.css";
+import { getLocalStorageId } from "../../helpers/getLocalStorageId";
+import axios from "axios";
 
-export const TodoApp = () => {
-  const [user, setUser] = useState(getLocalStorageUser());
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodo, setNewTodo] = useState({
-    id: "",
+export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
+  const [updatedTodo, setUpdatedTodo] = useState({
+    _id: id,
     title: "",
     content: "",
     date: new Date(),
     priority: "",
-    user_id: getLocalStorageId(),
+    user_id: user_id,
   });
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  async function getTodos(_id: string | null) {
+  async function updateTodo() {
     setLoading(true);
     try {
-      await axios
-        .get(`${import.meta.env.VITE_API_URL}getTodos/${_id}`)
-        .then((todos) => setTodos(todos["data"].todos));
-    } catch (error) {
-      Swal.fire({
-        title: "No se pudieron obtener los TODOs",
-        icon: "warning",
-      });
-    }
-    setLoading(false);
-  }
-
-  async function createTodo() {
-    try {
-      await axios.post(`${import.meta.env.VITE_API_URL}createTodo`, newTodo);
+      await axios.put(`${import.meta.env.VITE_API_URL}updateTodo`, updatedTodo);
       Swal.fire({
         title: "Guardado con Éxito",
         icon: "success",
       });
+      handleClose();
     } catch (error) {
       Swal.fire({
         title: "Hubo un error al guardar el TODO",
         icon: "warning",
       });
     }
+    setLoading(false);
   }
 
-  async function saveTodo() {
+  async function saveUpdatesTodo() {
     if (validateTodo()) {
-      await createTodo();
+      await updateTodo();
       await getTodos(getLocalStorageId());
     } else {
       Swal.fire({
@@ -76,44 +56,33 @@ export const TodoApp = () => {
   }
 
   function validateTodo() {
-    if (!newTodo.title && !newTodo.content && !newTodo.priority) {
+    if (!updatedTodo.title && !updatedTodo.content && !updatedTodo.priority) {
       return false;
     }
     return true;
   }
 
   function handleOnChangeTitle({ target }: any) {
-    setNewTodo({
-      ...newTodo,
+    setUpdatedTodo({
+      ...updatedTodo,
       title: target.value,
     });
   }
   function handleOnChangeDescription({ target }: any) {
-    setNewTodo({
-      ...newTodo,
+    setUpdatedTodo({
+      ...updatedTodo,
       content: target.value,
     });
   }
   function handleOnChangePriority({ target }: any) {
-    setNewTodo({
-      ...newTodo,
+    setUpdatedTodo({
+      ...updatedTodo,
       priority: target.value,
     });
   }
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, []);
-
-  useEffect(() => {
-    getTodos(getLocalStorageId());
-  }, []);
-
   return (
     <div>
-      <div className="todo-container">
+      <div style={{ backgroundColor: "white" }} className="todo-container">
         <TextField
           onChange={handleOnChangeTitle}
           label="Título"
@@ -130,7 +99,7 @@ export const TodoApp = () => {
         <Select
           labelId="priority-label"
           id="priority"
-          value={newTodo.priority}
+          value={updatedTodo.priority}
           label="Prioridad"
           onChange={handleOnChangePriority}
         >
@@ -146,17 +115,14 @@ export const TodoApp = () => {
             </Box>
           </Button>
         ) : (
-          <Button onClick={saveTodo} variant="contained" endIcon={<SendIcon />}>
-            Guardar TODO
+          <Button
+            onClick={saveUpdatesTodo}
+            variant="contained"
+            endIcon={<EditIcon />}
+          >
+            Actualizar TODO
           </Button>
         )}
-      </div>
-      <div>
-        {todos &&
-          todos.map((todo) => {
-            todo = { ...todo, getTodos: getTodos };
-            return <TodoComponent {...todo} key={todo._id}></TodoComponent>;
-          })}
       </div>
     </div>
   );

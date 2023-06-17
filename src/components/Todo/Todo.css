@@ -1,14 +1,19 @@
 .todo{
+    display: grid;
+    grid-template-columns: 50% 50%;
     padding: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     margin-top: 45px;
     margin-left: auto;
     margin-right: auto;
     border-radius: 10px;
     border: solid rgb(207, 201, 201) 1px;
     width: 70%;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
 }
 
 .alta {
