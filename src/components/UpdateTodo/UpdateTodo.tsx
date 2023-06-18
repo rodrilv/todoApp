@@ -11,9 +11,9 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import Swal from "sweetalert2";
 import { getLocalStorageId } from "../../helpers/getLocalStorageId";
-import { updateTodo } from "../../services";
+import { updateTodo, getTodos } from "../../services";
 
-export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
+export const UpdateTodo = ({ id, user_id, setTodos, handleClose }: any) => {
   const [loading, setLoading] = useState(false);
   const [updatedTodo, setUpdatedTodo] = useState({
     _id: id,
@@ -28,7 +28,7 @@ export const UpdateTodo = ({ id, user_id, getTodos, handleClose }: any) => {
     setLoading(true);
     if (validateTodo()) {
       await updateTodo(updatedTodo, handleClose);
-      await getTodos(getLocalStorageId());
+      await getTodos(getLocalStorageId(), setTodos);
     } else {
       Swal.fire({
         title: "Uno o más de los campos están vacíos!",

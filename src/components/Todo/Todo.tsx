@@ -73,7 +73,7 @@ export function TodoComponent({
           <UpdateTodo
             id={_id}
             user_id={user_id}
-            getTodos={getTodos}
+            setTodos={setTodos}
             handleClose={handleClose}
           />
         </Box>
