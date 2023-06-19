@@ -28,7 +28,6 @@ export const Login = () => {
           navigate("/", { replace: true });
         });
     } catch (error) {
-      console.log(error);
       setLoading(false);
       Swal.fire({
         title: "No se pudo iniciar sesión",

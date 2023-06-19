@@ -13,7 +13,6 @@ export async function register(setLoading: any, user: User) {
         });
         setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
       Swal.fire({
         title: "No se pudo registrar el usuario",

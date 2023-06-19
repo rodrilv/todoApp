@@ -7,7 +7,6 @@ export async function getTodos(_id: string | null, setTodos?: any | void){
           .get(`${import.meta.env.VITE_API_URL}getTodos/${_id}`)
           .then((todos) => setTodos(todos["data"].todos));
       } catch (error) {
-        console.log(error);
         Swal.fire({
           title: "No se pudieron obtener los TODO's",
           icon: "warning",
